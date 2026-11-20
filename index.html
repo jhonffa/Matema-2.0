@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#071525">
+<title>Mathema | Laboratorio Matemático Inmersivo</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjs@13.2.0/lib/browser/math.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+<style>
+:root{--bg:#071525;--panel:#0d2034;--panel2:#102941;--line:#24445e;--cyan:#00c2ff;--lime:#b8ef2b;--orange:#ff7a1a;--white:#f4f8fc;--muted:#9bb0c3;--danger:#ff6b6b;--shadow:0 18px 48px #0005}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background-color:var(--bg);background-image:linear-gradient(#12304a44 1px,transparent 1px),linear-gradient(90deg,#12304a44 1px,transparent 1px),radial-gradient(ellipse at 75% 0%,#07304a 0,transparent 45%);background-size:32px 32px,32px 32px,auto;color:var(--white);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--lime);outline-offset:3px}
+.app{min-height:100vh;display:grid;grid-template-columns:250px 1fr}.sidebar{position:sticky;top:0;height:100vh;padding:24px 16px;background:#081a2b;border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:10}.brand{display:flex;gap:12px;align-items:center;padding:4px 8px 26px}.brand-mark{width:42px;height:42px;border:1px solid var(--cyan);border-radius:12px;display:grid;place-items:center;color:var(--cyan);font-size:23px;box-shadow:0 0 24px #00c2ff30}.brand strong{display:block;font-size:19px;letter-spacing:.04em}.brand small{color:var(--muted);font-size:10px;letter-spacing:.14em;text-transform:uppercase}.nav-label{color:#66849c;font-size:10px;font-weight:800;letter-spacing:.16em;padding:14px 12px 8px}.nav{display:grid;gap:6px}.nav button{width:100%;text-align:left;background:transparent;border:1px solid transparent;color:#b9c9d8;padding:11px 12px;border-radius:10px;display:flex;gap:12px;align-items:center}.nav button:hover{background:#102941;color:white}.nav button.active{background:#10334b;border-color:#1b6682;color:var(--cyan)}.nav .ico{width:20px;text-align:center;font-size:17px}.side-bottom{margin-top:auto;border-top:1px solid var(--line);padding:16px 8px 0}.status{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px;margin:8px 0}.dot{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px #b8ef2b88}.dot.off{background:var(--orange);box-shadow:none}.main{min-width:0;padding:26px clamp(18px,4vw,52px) 60px;max-width:1600px;width:100%;margin:auto}.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:30px}.eyebrow{font-size:11px;color:var(--cyan);letter-spacing:.18em;text-transform:uppercase;font-weight:800}.topbar h1{font-size:clamp(24px,3vw,34px);margin:3px 0 0;letter-spacing:-.04em}.top-actions{display:flex;gap:9px;align-items:center}.mobile-menu{display:none}.icon-btn,.btn{border:1px solid var(--line);border-radius:9px;padding:9px 13px;background:#10263a;color:var(--white)}.btn.primary{background:var(--cyan);color:#041521;border-color:var(--cyan);font-weight:800}.btn.lime{background:var(--lime);color:#142000;border-color:var(--lime);font-weight:800}.btn.orange{background:var(--orange);color:#201000;border-color:var(--orange);font-weight:800}.btn.ghost{background:transparent}.btn:hover,.icon-btn:hover{filter:brightness(1.15)}.page{display:none}.page.active{display:block;animation:appear .22s ease}@keyframes appear{from{opacity:.5;transform:translateY(5px)}to{opacity:1;transform:none}}
+.hero{padding:clamp(24px,4vw,42px);border:1px solid #1e526d;border-radius:18px;background:linear-gradient(115deg,#0e2d43ed,#0a1c2eeb);box-shadow:var(--shadow);position:relative;overflow:hidden}.hero:after{content:"∫";position:absolute;right:7%;top:-70px;font:260px Georgia;color:#00c2ff12;pointer-events:none}.hero h2{font-size:clamp(27px,4vw,44px);line-height:1.12;max-width:720px;margin:10px 0 12px;letter-spacing:-.04em}.hero p{max-width:650px;color:#b4c7d7;margin:0 0 22px}.hero-actions{display:flex;flex-wrap:wrap;gap:10px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:14px;margin:30px 0 14px}.section-head h2,.section-head h3{margin:0}.section-head p{margin:3px 0 0;color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{background:linear-gradient(145deg,#10263aee,#0b1d2eeb);border:1px solid var(--line);border-radius:14px;padding:19px;box-shadow:0 8px 24px #0002;min-width:0}.card h3{margin:0 0 7px;font-size:17px}.card p{color:var(--muted);margin:0}.module-card{grid-column:span 4;min-height:170px;cursor:pointer;transition:.2s}.module-card:hover{transform:translateY(-3px);border-color:var(--cyan)}.module-card .symbol{font-size:24px;color:var(--cyan);margin-bottom:12px}.module-card .go{display:inline-block;color:var(--lime);font-size:12px;margin-top:15px;font-weight:700}.stat-card{grid-column:span 3}.stat-card strong{font-size:25px;color:var(--cyan);display:block}.stat-card small{color:var(--muted)}
+.workspace{display:grid;grid-template-columns:minmax(270px,350px) minmax(0,1fr);gap:16px;align-items:start}.controls{display:grid;gap:14px}.field{display:grid;gap:6px;margin-bottom:12px}.field label{font-size:12px;color:#b8cbd9;font-weight:700}.field input,.field select,.field textarea,.data-input{width:100%;padding:10px 11px;border-radius:8px;border:1px solid #31516a;background:#071a2a;color:var(--white);min-width:0}.field textarea{min-height:82px;resize:vertical}.field input::placeholder,.field textarea::placeholder{color:#71899d}.hint{font-size:11px;color:#7893a8}.inline-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}.button-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.result-panel{min-width:0}.result-box{border:1px solid #24506b;border-radius:12px;background:#081b2b;padding:15px;margin-bottom:14px}.result-box .kicker{font-size:10px;color:var(--muted);letter-spacing:.13em;text-transform:uppercase}.result-value{font-size:clamp(22px,3vw,32px);font-weight:800;color:var(--lime);margin:4px 0}.math-note{font-family:ui-monospace,monospace;color:#b8d5e8;overflow-wrap:anywhere}.plot{width:100%;height:390px;min-height:300px}.plot.tall{height:470px}.plot-wrap{border:1px solid var(--line);border-radius:12px;background:#071a2a;overflow:hidden}.notice{padding:11px 13px;border-radius:9px;background:#0c3045;border-left:3px solid var(--cyan);color:#c6d9e7;font-size:13px;margin:12px 0}.notice.warn{border-left-color:var(--orange);background:#332516}.notice.good{border-left-color:var(--lime)}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}.tab{background:#0b2032;border:1px solid var(--line);color:#a9bfd0;border-radius:8px;padding:8px 12px}.tab.active{border-color:var(--cyan);color:var(--cyan);background:#103149}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:13px}th,td{text-align:left;padding:9px;border-bottom:1px solid #203c52}th{color:var(--cyan);font-size:11px;text-transform:uppercase;letter-spacing:.08em}.teacher-layout{display:grid;grid-template-columns:minmax(280px,420px) minmax(0,1fr);gap:16px}.route{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.route-step{padding:12px 8px;border:1px solid var(--line);border-radius:9px;text-align:center;background:#091d2d}.route-step b{display:block;color:var(--cyan);font-size:12px}.route-step small{color:var(--muted)}.output{white-space:pre-wrap;overflow-wrap:anywhere;color:#d7e5ef;font-size:13px;line-height:1.7}.rubric-row{display:grid;grid-template-columns:1fr 45px;gap:8px;padding:9px 0;border-bottom:1px solid #203c52}.rubric-row strong{color:var(--lime);text-align:right}.toast{position:fixed;right:20px;bottom:20px;z-index:99;padding:12px 16px;background:#173b50;border:1px solid var(--cyan);border-radius:10px;box-shadow:var(--shadow);display:none;max-width:min(90vw,380px)}.toast.show{display:block;animation:appear .2s}.footer-note{font-size:11px;color:#7892a7;margin-top:22px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:1000px){.app{grid-template-columns:215px 1fr}.module-card{grid-column:span 6}.workspace,.teacher-layout{grid-template-columns:1fr}.controls{grid-template-columns:repeat(2,minmax(0,1fr))}.controls>.card:first-child{grid-column:span 2}}
+@media(max-width:720px){.app.visible{display:block}.sidebar{position:fixed;left:0;top:0;width:270px;transform:translateX(-105%);transition:transform .25s;box-shadow:var(--shadow)}.sidebar.open{transform:translateX(0)}.mobile-menu{display:inline-flex}.main{padding:17px 14px 40px}.topbar{margin-bottom:20px}.topbar h1{font-size:24px}.top-actions .btn{padding:8px}.module-card{grid-column:span 12}.stat-card{grid-column:span 6}.controls{grid-template-columns:1fr}.controls>.card:first-child{grid-column:auto}.plot{height:330px}.route{grid-template-columns:repeat(2,1fr)}.hero:after{right:-20px}.inline-fields{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+body.high-contrast{--bg:#000;--panel:#000;--panel2:#111;--line:#fff;--white:#fff;--muted:#eee;background:#000}
+.gesture-panel{position:fixed;right:16px;bottom:70px;z-index:50;width:200px;background:#0d2034ee;border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:var(--shadow);display:none;flex-direction:column;gap:8px}
+.gesture-panel.active{display:flex}
+.gesture-panel video{width:100%;border-radius:8px;background:#000;transform:scaleX(-1)}
+.gesture-panel canvas{position:absolute;top:12px;left:12px;width:calc(100% - 24px);height:auto;pointer-events:none;transform:scaleX(-1)}
+.gesture-status{font-size:12px;color:var(--muted);text-align:center}
+.gesture-status strong{color:var(--lime);display:block;font-size:14px;margin-top:2px}
+.gesture-hint{font-size:11px;color:#7893a8;line-height:1.4}
+.btn.gesture-on{background:var(--lime);color:#142000;border-color:var(--lime);font-weight:800}
+.cover{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px;background-color:#071525;background-image:linear-gradient(#12304a44 1px,transparent 1px),linear-gradient(90deg,#12304a44 1px,transparent 1px),radial-gradient(ellipse at 50% 20%,#0a3a5c 0,transparent 55%);background-size:32px 32px,32px 32px,auto}
+.cover.hidden{display:none}
+.cover-card{max-width:560px;width:100%;text-align:center;padding:clamp(28px,5vw,48px);border:1px solid #1e526d;border-radius:20px;background:linear-gradient(145deg,#0e2d43f2,#0a1c2ef5);box-shadow:0 24px 60px #0006}
+.cover-mark{width:64px;height:64px;margin:0 auto 18px;border:1px solid var(--cyan);border-radius:16px;display:grid;place-items:center;color:var(--cyan);font-size:32px;box-shadow:0 0 28px #00c2ff40}
+.cover-card .eyebrow{margin-bottom:6px}
+.cover-card h1{font-size:clamp(28px,5vw,40px);margin:0 0 10px;letter-spacing:-.03em}
+.cover-card .tagline{color:#b4c7d7;margin:0 0 28px;font-size:15px}
+.cover-audience{display:inline-block;padding:8px 16px;border-radius:999px;border:1px solid #1b6682;background:#10334b;color:var(--cyan);font-size:13px;font-weight:700;margin-bottom:28px}
+.cover-authors{text-align:left;padding:18px 20px;border-radius:12px;border:1px solid var(--line);background:#081b2b;margin-bottom:28px}
+.cover-authors .label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:10px}
+.cover-authors ul{list-style:none;margin:0;padding:0}
+.cover-authors li{padding:8px 0;border-bottom:1px solid #203c52;color:var(--white);font-weight:600}
+.cover-authors li:last-child{border-bottom:none}
+.cover-authors li span{display:block;font-size:12px;color:var(--muted);font-weight:500;margin-top:2px}
+.cover-card .btn.primary{padding:12px 28px;font-size:16px}
+.app{display:none}
+.app.visible{display:grid}
+@media(max-width:720px){.app.visible{display:block}}
+</style>
+</head>
+<body>
+<div class="cover" id="cover" role="dialog" aria-labelledby="coverTitle">
+  <div class="cover-card">
+    <div class="cover-mark" aria-hidden="true">∑</div>
+    <div class="eyebrow">MATHEMA</div>
+    <h1 id="coverTitle">Laboratorio Matemático Inmersivo</h1>
+    <p class="tagline">Explora límites, derivadas y estadística con visualización interactiva y control gestual.</p>
+    <div class="cover-audience">Destinado a estudiantes de grado 11</div>
+    <div class="cover-authors">
+      <div class="label">Página elaborada por</div>
+      <ul>
+        <li>Jhon Fausto Fragozo Alvarez<span>Autor</span></li>
+        <li>Mabel Consuelo Barragan Caballero<span>Autora</span></li>
+      </ul>
+    </div>
+    <button class="btn primary" id="enterApp" type="button">Entrar al laboratorio →</button>
+  </div>
+</div>
+<div class="app" id="app">
+<aside class="sidebar" id="sidebar" aria-label="Navegación principal">
+  <div class="brand"><div class="brand-mark" aria-hidden="true">∑</div><div><strong>MATHEMA</strong><small>Laboratorio inmersivo</small></div></div>
+  <div class="nav-label">ESPACIO DE TRABAJO</div>
+  <nav class="nav">
+    <button class="active" data-page="home"><span class="ico">⌂</span>Inicio</button>
+    <button data-page="limits"><span class="ico"> lim</span>Límites</button>
+    <button data-page="derivatives"><span class="ico">ƒ′</span>Derivadas</button>
+    <button data-page="data"><span class="ico">▥</span>Estadística</button>
+    <button data-page="teacher"><span class="ico">▤</span>Modo docente</button>
+  </nav>
+  <div class="side-bottom">
+    <div class="nav-label">SISTEMAS</div>
+    <div class="status"><span class="dot" id="mathDot"></span><span id="mathStatus">Motor matemático: verificando</span></div>
+    <div class="status"><span class="dot" id="xrDot"></span><span id="xrStatus">WebXR: verificando</span></div>
+    <div class="status"><span class="dot" id="plotDot"></span><span id="plotStatus">Visualización: verificando</span></div>
+  </div>
+</aside>
+<main class="main">
+<header class="topbar">
+  <div style="display:flex;gap:11px;align-items:center"><button class="icon-btn mobile-menu" id="menuBtn" aria-label="Abrir menú" aria-expanded="false">☰</button><div><div class="eyebrow">Entorno de exploración matemática</div><h1 id="pageTitle">Inicio</h1></div></div>
+  <div class="top-actions"><button class="btn ghost" id="contrastBtn" aria-pressed="false" title="Activar alto contraste">◐ Contraste</button><button class="btn" id="gestureBtn" title="Activar control gestual con la cámara">✋ Gestos</button><button class="btn" id="speakBtn" title="Narrar contenido">▶ Narrar</button></div>
+</header>
+
+<section class="page active" id="page-home" aria-labelledby="homeTitle">
+  <div class="hero">
+    <div class="eyebrow">MATEMÁTICAS · EXPLORACIÓN · EXPERIMENTACIÓN</div>
+    <h2 id="homeTitle">Piensa, experimenta y comprende las matemáticas.</h2>
+    <p>Un laboratorio digital para investigar el comportamiento de funciones, interpretar la derivada y transformar datos en argumentos matemáticos. Explora en 2D o en una escena tridimensional.</p>
+    <div class="hero-actions"><button class="btn primary" data-goto="limits">Explorar límites ↗</button><button class="btn lime" data-goto="teacher">Diseñar una secuencia</button></div>
+  </div>
+  <div class="section-head"><div><h2>Laboratorios</h2><p>Selecciona una experiencia para comenzar.</p></div></div>
+  <div class="grid">
+    <article class="card module-card" data-goto="limits" tabindex="0" role="button" aria-label="Abrir laboratorio de límites"><div class="symbol">lim x→a</div><h3>Comportamiento local</h3><p>Explora aproximaciones laterales, discontinuidades y límites numéricos y gráficos.</p><span class="go">ABRIR LABORATORIO →</span></article>
+    <article class="card module-card" data-goto="derivatives" tabindex="0" role="button" aria-label="Abrir laboratorio de derivadas"><div class="symbol">ƒ′(x)</div><h3>Razón de cambio</h3><p>Obtén derivadas simbólicas y observa la recta tangente y la pendiente local.</p><span class="go">ABRIR LABORATORIO →</span></article>
+    <article class="card module-card" data-goto="data" tabindex="0" role="button" aria-label="Abrir laboratorio de estadística"><div class="symbol">▥ x̄ · s</div><h3>Estadística</h3><p>Organiza conjuntos, calcula medidas descriptivas y explora distribuciones en 2D y 3D.</p><span class="go">ABRIR LABORATORIO →</span></article>
+  </div>
+  <div class="section-head"><div><h2>Panel del laboratorio</h2><p>Estado de las herramientas disponibles en este dispositivo.</p></div></div>
+  <div class="grid">
+    <div class="card stat-card"><strong id="homeMath">—</strong><small>Motor matemático</small></div>
+    <div class="card stat-card"><strong id="homePlot">—</strong><small>Gráficas interactivas</small></div>
+    <div class="card stat-card"><strong id="homeXR">—</strong><small>Capacidad WebXR</small></div>
+    <div class="card stat-card"><strong>2D + 3D</strong><small>Alternativas de visualización</small></div>
+  </div>
+  <div class="notice">Accesibilidad: todas las experiencias disponen de controles convencionales y representaciones 2D. La cámara o un visor XR no son requisitos para utilizar Mathema. El control gestual (botón ✋ Gestos) es opcional y mejora la exploración de la superficie 3D.</div>
+</section>
+
+<section class="page" id="page-limits">
+  <div class="section-head"><div><h2>Laboratorio de límites</h2><p>Analiza el valor al que se aproxima una función cuando x se acerca a un punto.</p></div></div>
+  <div class="workspace">
+    <div class="controls">
+      <div class="card">
+        <h3>Definición del experimento</h3>
+        <div class="field"><label for="limitExpr">Función f(x)</label><input id="limitExpr" value="(x^2-1)/(x-1)" spellcheck="false" aria-describedby="limitHelp"><span class="hint" id="limitHelp">Ejemplo: (x^2-1)/(x-1), sin escribir f(x)=.</span></div>
+        <div class="inline-fields">
+          <div class="field"><label for="limitPoint">Punto a</label><input id="limitPoint" type="number" value="1" step="any"></div>
+          <div class="field"><label for="limitDelta">Distancia inicial</label><input id="limitDelta" type="number" value="1" min="0.0001" step="any"></div>
+        </div>
+        <div class="field"><label for="limitApproach">Aproximación</label><select id="limitApproach"><option value="both">Por ambos lados</option><option value="left">Por la izquierda</option><option value="right">Por la derecha</option></select></div>
+        <div class="button-row"><button class="btn primary" id="calcLimit">Calcular límite</button><button class="btn" id="resetLimit">Restablecer</button></div>
+        <div class="notice">Admite expresiones de math.js como sin(x), cos(x), exp(x), log(x), sqrt(x), abs(x), x^2.</div>
+      </div>
+      <div class="card"><h3>Lectura matemática</h3><p id="limitExplain" class="output">Introduce una función y calcula para observar su comportamiento.</p></div>
+    </div>
+    <div class="result-panel">
+      <div class="result-box"><div class="kicker">Estimación numérica</div><div class="result-value" id="limitResult">—</div><div class="math-note" id="limitFormula">lim x → a f(x)</div></div>
+      <div class="card" style="margin-bottom:14px"><h3>Tabla de aproximación</h3><div class="table-wrap"><table><thead><tr><th>x</th><th>f(x)</th><th>Lado</th></tr></thead><tbody id="limitTable"><tr><td colspan="3">Ejecuta el cálculo para generar valores.</td></tr></tbody></table></div></div>
+      <div class="plot-wrap"><div id="limitPlot" class="plot" role="img" aria-label="Gráfica de la función en torno al punto de aproximación"></div></div>
+      <div class="notice" id="limitXRNote">Vista 2D activa. La visualización no requiere cámara.</div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="page-derivatives">
+  <div class="section-head"><div><h2>Laboratorio de derivadas</h2><p>Conecta la representación algebraica con la interpretación geométrica de la pendiente.</p></div></div>
+  <div class="workspace">
+    <div class="controls">
+      <div class="card">
+        <h3>Función y punto de análisis</h3>
+        <div class="field"><label for="derivExpr">Función f(x)</label><input id="derivExpr" value="x^3-3*x^2+2" spellcheck="false"></div>
+        <div class="field"><label for="derivPoint">Punto x₀</label><input id="derivPoint" type="number" value="2" step="any"></div>
+        <div class="field"><label for="derivH">Ventana de visualización</label><input id="derivH" type="number" value="4" min="0.1" step="any"></div>
+        <div class="button-row"><button class="btn primary" id="calcDeriv">Derivar y graficar</button><button class="btn" id="resetDeriv">Restablecer</button></div>
+      </div>
+      <div class="card"><h3>Resultado simbólico</h3><div class="result-value" id="derivResult" style="font-size:22px">—</div><div class="math-note" id="derivAtPoint">f′(x₀) = —</div><div class="notice" id="derivMeaning">La pendiente de la tangente representa la razón de cambio instantánea de la función en el punto.</div></div>
+      <div class="card"><h3>Vista 2D y 3D</h3><p>Al derivar se generan dos representaciones: la gráfica plana con la recta tangente y una vista tridimensional de la misma curva y su pendiente local.</p><div class="hint" style="margin-top:10px">Usa el botón <strong>✋ Gestos</strong> para desplazar, rotar y hacer zoom. Palma abierta = mover/rotar · Dos manos = zoom · Puño = restablecer.</div></div>
+    </div>
+    <div class="result-panel">
+      <div class="plot-wrap"><div id="derivPlot" class="plot" role="img" aria-label="Gráfica 2D de la función, su tangente y el punto de derivación"></div></div>
+      <div class="section-head"><div><h3>Vista tridimensional de la función y la tangente</h3><p>Misma curva en el espacio. Arrastra o usa gestos para rotar y acercar.</p></div></div>
+      <div class="plot-wrap"><div id="surfacePlot" class="plot tall" role="img" aria-label="Gráfica 3D de la función y su recta tangente"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="page-data">
+  <div class="section-head"><div><h2>Estadística</h2><p>Explora distribuciones, resume información y visualiza en 2D o 3D con control gestual.</p></div></div>
+  <div class="workspace">
+    <div class="controls">
+      <div class="card">
+        <h3>Conjunto de datos</h3>
+        <div class="field"><label for="dataValues">Valores separados por coma o espacio</label><textarea id="dataValues" rows="5">12, 15, 15, 18, 20, 21, 21, 21, 24, 28, 30</textarea></div>
+        <div class="field"><label for="chartType">Representación</label>
+          <select id="chartType">
+            <option value="histogram3d">Histograma 3D</option>
+            <option value="bar3d">Barras 3D (frecuencias)</option>
+            <option value="pie3d">Diagrama circular 3D</option>
+            <option value="box">Diagrama de caja</option>
+            <option value="line3d">Secuencia 3D</option>
+          </select>
+        </div>
+        <div class="button-row"><button class="btn primary" id="analyzeData">Analizar datos</button><button class="btn" id="sampleData">Cargar ejemplo B</button></div>
+        <div class="hint">Números decimales admitidos. Los gráficos 3D se rotan y amplían con gestos (✋ Gestos).</div>
+      </div>
+      <div class="card"><h3>Medidas descriptivas</h3><div class="table-wrap"><table><tbody id="dataStats"><tr><td>Media</td><td>—</td></tr><tr><td>Mediana</td><td>—</td></tr><tr><td>Moda</td><td>—</td></tr><tr><td>Rango</td><td>—</td></tr><tr><td>Desviación estándar</td><td>—</td></tr></tbody></table></div></div>
+    </div>
+    <div class="result-panel">
+      <div class="plot-wrap"><div id="dataPlot" class="plot tall" role="img" aria-label="Visualización estadística del conjunto de datos"></div></div>
+      <div class="card" style="margin-top:14px"><h3>Interpretación</h3><p id="dataInterpretation">Ingresa o carga un conjunto de datos para calcular medidas y construir una representación.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="page-teacher">
+  <div class="section-head"><div><h2>Constructor de secuencias didácticas</h2><p>Diseña experiencias de aprendizaje basadas en exploración, razonamiento y transferencia.</p></div></div>
+  <div class="teacher-layout">
+    <div class="card">
+      <h3>Ficha de diseño</h3>
+      <form id="lessonForm">
+        <div class="field"><label for="lessonTitle">Título de la secuencia</label><input id="lessonTitle" required value="¿Cómo cambia una función?"></div>
+        <div class="inline-fields"><div class="field"><label for="lessonLevel">Nivel educativo</label><select id="lessonLevel"><option>Educación media</option><option>Licenciatura en Matemáticas</option><option>Educación básica secundaria</option><option>Educación superior</option></select></div><div class="field"><label for="lessonDuration">Duración</label><input id="lessonDuration" value="2 sesiones de 60 min" required></div></div>
+        <div class="field"><label for="lessonObjective">Objetivo didáctico</label><textarea id="lessonObjective" required>Interpretar el comportamiento local de una función y relacionarlo con la noción de límite y razón de cambio.</textarea></div>
+        <div class="field"><label for="lessonQuestion">Pregunta retadora</label><textarea id="lessonQuestion" required>¿Cómo podemos describir qué ocurre con una función cerca de un punto, incluso si no conocemos su valor allí?</textarea></div>
+        <div class="field"><label for="lessonEvidence">Evidencia de aprendizaje</label><textarea id="lessonEvidence" required>Informe breve con tabla de aproximaciones, gráfica anotada y explicación argumentada.</textarea></div>
+        <div class="button-row"><button class="btn primary" type="submit">Generar secuencia</button><button class="btn" type="button" id="saveLesson">Guardar</button></div>
+      </form>
+      <div class="button-row"><button class="btn" id="exportLesson">Exportar JSON</button><button class="btn" id="importLesson">Importar JSON</button><input class="sr-only" type="file" id="importFile" accept=".json,application/json"></div>
+      <div class="hint" id="saveStatus" aria-live="polite">Los proyectos se guardan localmente en este navegador.</div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:14px"><h3>Ruta de aprendizaje</h3><div class="route"><div class="route-step"><b>01 · OBSERVAR</b><small>Explorar patrones</small></div><div class="route-step"><b>02 · CALCULAR</b><small>Probar estrategias</small></div><div class="route-step"><b>03 · EXPLICAR</b><small>Argumentar</small></div><div class="route-step"><b>04 · TRANSFERIR</b><small>Aplicar en contexto</small></div></div><div class="button-row"><button class="btn" id="copyScript">Copiar guion</button><button class="btn" id="readScript">Narrar guion</button></div></div>
+      <div class="card" style="margin-bottom:14px"><h3>Guion para estudiantes</h3><div id="studentScript" class="output" aria-live="polite">Completa la ficha y selecciona “Generar secuencia”. Aquí aparecerán las instrucciones organizadas en cuatro momentos.</div></div>
+      <div class="card"><h3>Rúbrica de evaluación · 100 puntos</h3><div id="rubric"><div class="rubric-row"><span>Exactitud matemática</span><strong>35</strong></div><div class="rubric-row"><span>Argumentación</span><strong>30</strong></div><div class="rubric-row"><span>Diseño XR</span><strong>20</strong></div><div class="rubric-row"><span>Inclusión</span><strong>15</strong></div></div><p class="hint" style="margin-top:10px">La valoración considera explicaciones escritas u orales y alternativas 2D accesibles.</p></div>
+    </div>
+  </div>
+</section>
+<p class="footer-note">MATHEMA · Laboratorio Matemático Inmersivo · Las operaciones se ejecutan en el navegador. Se requiere conexión a internet para cargar las bibliotecas CDN la primera vez.</p>
+</main>
+</div>
+<div class="gesture-panel" id="gesturePanel" aria-label="Panel de control gestual">
+  <div style="position:relative">
+    <video id="gestureVideo" playsinline autoplay muted></video>
+    <canvas id="gestureCanvas"></canvas>
+  </div>
+  <div class="gesture-status">Gesto actual<strong id="gestureLabel">—</strong></div>
+  <div class="gesture-hint">✋ Palma abierta + mover → desplazar / rotar<br>👐 Dos manos → zoom<br>✊ Puño → restablecer vista<br><span style="opacity:.8">Funciona en funciones, derivadas y 3D</span></div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+/* MATHEMA — código didáctico comentado.
+   Personalización: cambia las variables CSS de :root para ajustar la identidad visual.
+   Funciones y expresiones: modifica los valores iniciales de cada campo o las funciones
+   de cálculo. Escenas XR: la detección está centralizada en initCapabilities().
+   El motor math.js evalúa expresiones mediante parse/compile/evaluate; nunca se usa eval().
+*/
+const $ = id => document.getElementById(id);
+const mathReady = () => typeof math !== "undefined" && typeof math.parse === "function";
+const plotReady = () => typeof Plotly !== "undefined";
+const fmt = n => Number.isFinite(n) ? Number(n.toPrecision(7)).toString() : (Number.isNaN(n) ? "No definido" : (n > 0 ? "∞" : "−∞"));
+const showToast = message => { const t=$("toast"); t.textContent=message; t.classList.add("show"); clearTimeout(showToast.timer); showToast.timer=setTimeout(()=>t.classList.remove("show"),2800); };
+const safeCompile = expression => { if(!mathReady()) throw Error("El motor math.js no está disponible. Comprueba tu conexión."); const node=math.parse(expression); return node.compile(); };
+const evaluate1 = (compiled,x) => { const y=compiled.evaluate({x}); const n=typeof y==="number"?y:Number(y); return Number.isFinite(n)?n:NaN; };
+const plotLayout = (title,xTitle="x",yTitle="y") => ({title:{text:title,font:{color:"#eaf5fc",size:15}},paper_bgcolor:"#071a2a",plot_bgcolor:"#071a2a",font:{color:"#b8cbd9"},margin:{l:55,r:22,t:48,b:48},xaxis:{title:xTitle,gridcolor:"#1b3549",zerolinecolor:"#426078"},yaxis:{title:yTitle,gridcolor:"#1b3549",zerolinecolor:"#426078"},legend:{orientation:"h",y:-.22},hovermode:"closest"});
+const plotConfig={responsive:true,displaylogo:false,scrollZoom:true};
+let currentPage="home", lastScript="";
+function navigate(page){if(!$("page-"+page))return;currentPage=page;document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+page));document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page));$("pageTitle").textContent=({home:"Inicio",limits:"Límites",derivatives:"Derivadas",data:"Estadística",teacher:"Modo docente"})[page];$("sidebar").classList.remove("open");$("menuBtn").setAttribute("aria-expanded","false");if(page==="limits"&&!$("limitResult").textContent.includes("—")){}if(page==="derivatives"&&!$("derivResult").textContent.includes("—")){} }
+document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.page)));
+document.querySelectorAll("[data-goto]").forEach(el=>{el.addEventListener("click",()=>navigate(el.dataset.goto));el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();navigate(el.dataset.goto)}})});
+$("menuBtn").addEventListener("click",()=>{const open=$("sidebar").classList.toggle("open");$("menuBtn").setAttribute("aria-expanded",String(open));});
+$("contrastBtn").addEventListener("click",()=>{const on=document.body.classList.toggle("high-contrast");$("contrastBtn").setAttribute("aria-pressed",String(on));});
+function speak(text){if(!("speechSynthesis" in window)){showToast("La narración no está disponible en este navegador.");return;}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="es-CO";u.rate=.94;speechSynthesis.speak(u);}
+$("speakBtn").addEventListener("click",()=>speak(document.querySelector(".page.active")?.innerText||"Mathema"));
+function initCapabilities(){
+ const m=mathReady(),p=plotReady();$("mathDot").classList.toggle("off",!m);$("plotDot").classList.toggle("off",!p);
+ $("mathStatus").textContent=m?"Motor matemático: operativo":"Motor matemático: no disponible";$("plotStatus").textContent=p?"Visualización: operativa":"Visualización: no disponible";
+ $("homeMath").textContent=m?"Operativo":"Sin conexión";$("homePlot").textContent=p?"Plotly.js":"No disponible";
+ const xr=!!(navigator.xr&&navigator.xr.isSessionSupported);$("xrDot").classList.toggle("off",!xr);$("xrStatus").textContent=xr?"WebXR: API detectada":"WebXR: no detectado";$("homeXR").textContent=xr?"Disponible":"No detectado";
+ if(xr){navigator.xr.isSessionSupported("immersive-ar").then(ok=>{$("xrStatus").textContent=ok?"WebXR: AR compatible":"WebXR: API disponible (AR no compatible)";$("homeXR").textContent=ok?"AR compatible":"API detectada";}).catch(()=>{});}
+}
+function drawEmpty(id,message){if(plotReady())Plotly.newPlot(id,[],{...plotLayout(message),annotations:[{text:message,x:.5,y:.5,xref:"paper",yref:"paper",showarrow:false,font:{color:"#8da7ba"}}]},plotConfig);}
+function computeLimit(){
+ try{
+  const expr=$("limitExpr").value.trim(),a=Number($("limitPoint").value),delta=Number($("limitDelta").value),side=$("limitApproach").value;
+  if(!expr||!Number.isFinite(a)||!Number.isFinite(delta)||delta<=0)throw Error("Escribe una función, un punto y una distancia positiva.");
+  const c=safeCompile(expr),rows=[],eps=[1,.5,.2,.1,.05,.01,.001,.0001].map(v=>v*delta),vals={left:[],right:[]};
+  for(const d of eps){for(const s of ["left","right"]){if(side!=="both"&&side!==s)continue;const x=a+(s==="left"?-d:d),y=evaluate1(c,x);rows.push({x,y,s});if(Number.isFinite(y))vals[s].push(y);}}
+  const estimate=arr=>arr.length?arr.slice(-3).reduce((u,v)=>u+v,0)/Math.min(3,arr.length):NaN;
+  const L=estimate(vals.left),R=estimate(vals.right),result=side==="left"?L:side==="right"?R:(Number.isFinite(L)&&Number.isFinite(R)&&Math.abs(L-R)<1e-3*Math.max(1,Math.abs(L),Math.abs(R))?(L+R)/2:NaN);
+  $("limitResult").textContent=Number.isFinite(result)?fmt(result):"No existe / no estimable";
+  $("limitFormula").textContent=`lim x → ${fmt(a)} (${expr})`;
+  $("limitExplain").textContent=side==="both"?(Number.isFinite(result)?`Las aproximaciones laterales son compatibles y sugieren un límite cercano a ${fmt(result)}. La estimación numérica no sustituye la justificación analítica.`:`Las aproximaciones laterales no convergen al mismo valor o no permiten estimar un límite finito. Compara los comportamientos por izquierda y derecha.`):`Estimación por ${side==="left"?"la izquierda":"la derecha"}: ${fmt(result)}. Para afirmar que existe el límite bilateral, también debe coincidir la aproximación del otro lado.`;
+  $("limitTable").innerHTML=rows.map(r=>`<tr><td>${fmt(r.x)}</td><td>${fmt(r.y)}</td><td>${r.s==="left"?"Izquierda":"Derecha"}</td></tr>`).join("")||'<tr><td colspan="3">Sin valores evaluables.</td></tr>';
+  const xs=[],ys=[];for(let i=0;i<=240;i++){const x=a-2*delta+4*delta*i/240;xs.push(x);ys.push(evaluate1(c,x));}
+  const traces=[{x:xs,y:ys,type:"scatter",mode:"lines",name:"f(x)",line:{color:"#00c2ff",width:3}},{x:[a],y:[Number.isFinite(result)?result:0],type:"scatter",mode:"markers",name:"Estimación",marker:{color:"#b8ef2b",size:10}}];
+  Plotly.react("limitPlot",traces,{...plotLayout("Aproximación al punto","x","f(x)"),shapes:[{type:"line",x0:a,x1:a,y0:0,y1:1,yref:"paper",line:{color:"#ff7a1a",dash:"dot"}}]},plotConfig);
+  if(typeof gestureState!=="undefined") gestureState.ranges.limitPlot=null;
+ }catch(e){showToast(e.message);}
+}
+$("calcLimit").addEventListener("click",computeLimit);
+$("resetLimit").addEventListener("click",()=>{$("limitExpr").value="(x^2-1)/(x-1)";$("limitPoint").value=1;$("limitDelta").value=1;$("limitApproach").value="both";$("limitResult").textContent="—";$("limitExplain").textContent="Introduce una función y calcula para observar su comportamiento.";drawEmpty("limitPlot","Configura y calcula un límite");});
+function computeDerivative(){
+ try{
+  const expr=$("derivExpr").value.trim(),x0=Number($("derivPoint").value),w=Number($("derivH").value);
+  if(!expr||!Number.isFinite(x0)||!Number.isFinite(w)||w<=0)throw Error("Verifica la función, el punto y la ventana.");
+  const node=math.parse(expr),dnode=math.derivative(node,"x"),dc=dnode.compile(),fc=node.compile();
+  const slope=evaluate1(dc,x0),y0=evaluate1(fc,x0);
+  $("derivResult").textContent=dnode.toString({parenthesis:"auto"});
+  $("derivAtPoint").textContent=`f(${fmt(x0)}) = ${fmt(y0)}  ·  f′(${fmt(x0)}) = ${fmt(slope)}`;
+  $("derivMeaning").textContent=Number.isFinite(slope)
+    ?`En x = ${fmt(x0)}, la pendiente de la recta tangente es ${fmt(slope)}. ${slope>0?"La función crece localmente.":slope<0?"La función decrece localmente.":"La tangente es horizontal."}`
+    :"La derivada no está definida numéricamente en este punto.";
+
+  // --- Datos para 2D y 3D ---
+  const xs=[], ys=[], ty=[];
+  for(let i=0;i<=300;i++){
+    const x=x0-w+2*w*i/300;
+    xs.push(x);
+    ys.push(evaluate1(fc,x));
+    ty.push(y0+slope*(x-x0));
+  }
+
+  // ——— Gráfica 2D ———
+  Plotly.react("derivPlot",[
+    {x:xs,y:ys,type:"scatter",mode:"lines",name:"f(x)",line:{color:"#00c2ff",width:3}},
+    {x:xs,y:ty,type:"scatter",mode:"lines",name:"Tangente",line:{color:"#ff7a1a",dash:"dash",width:2}},
+    {x:[x0],y:[y0],type:"scatter",mode:"markers",name:"Punto",marker:{color:"#b8ef2b",size:10}}
+  ],plotLayout("Función y recta tangente (2D)","x","y"),plotConfig);
+  if(typeof gestureState!=="undefined") gestureState.ranges.derivPlot=null;
+
+  // ——— Gráfica 3D: curva de la función + tangente en el espacio ---
+  // Curva en el plano y=0: puntos (x, 0, f(x)). Tangente análoga.
+  const zeros = xs.map(()=>0);
+  // Cinta (surface) que extruye f(x) en y para dar volumen y percibir la pendiente
+  const xRibbon = [];
+  const zRow0 = [], zRow1 = [];
+  for(let i=0;i<xs.length;i+=3){
+    xRibbon.push(xs[i]);
+    zRow0.push(ys[i]);
+    zRow1.push(ys[i]);
+  }
+  const traces3d = [
+    {
+      type:"surface", name:"Cinta f(x)",
+      x: xRibbon,
+      y: [-0.4, 0.4],
+      z: [zRow0, zRow1],
+      colorscale:[[0,"#0a3048"],[0.5,"#00c2ff"],[1,"#b8ef2b"]],
+      opacity:0.55, showscale:false, hoverinfo:"skip"
+    },
+    {
+      type:"scatter3d", mode:"lines", name:"f(x)",
+      x:xs, y:zeros, z:ys,
+      line:{color:"#00c2ff", width:8}
+    },
+    {
+      type:"scatter3d", mode:"lines", name:"Tangente",
+      x:xs, y:zeros, z:ty,
+      line:{color:"#ff7a1a", width:6}
+    },
+    {
+      type:"scatter3d", mode:"markers", name:"Punto de análisis",
+      x:[x0], y:[0], z:[y0],
+      marker:{color:"#b8ef2b", size:6}
+    }
+  ];
+
+  const eye3d = (typeof gestureState!=="undefined" && gestureState.cameraEye)
+    ? {...gestureState.cameraEye}
+    : {x:1.7, y:1.5, z:1.15};
+
+  const layout3d = {
+    title:{text:"Función y tangente en el espacio (3D)", font:{color:"#eaf5fc", size:15}},
+    paper_bgcolor:"#071a2a",
+    font:{color:"#b8cbd9"},
+    margin:{l:0, r:0, t:48, b:0},
+    scene:{
+      xaxis:{title:"x", gridcolor:"#36536b", backgroundcolor:"#071a2a"},
+      yaxis:{title:"y", gridcolor:"#36536b", backgroundcolor:"#071a2a", range:[-1.2, 1.2]},
+      zaxis:{title:"f(x)", gridcolor:"#36536b", backgroundcolor:"#071a2a"},
+      bgcolor:"#071a2a",
+      camera:{ eye: eye3d, center:{x:0,y:0,z:0}, up:{x:0,y:0,z:1} },
+      aspectmode:"manual",
+      aspectratio:{x:1.5, y:0.55, z:1}
+    },
+    legend:{orientation:"h", y:-0.14}
+  };
+  Plotly.react("surfacePlot", traces3d, layout3d, plotConfig);
+
+ }catch(e){showToast("No se pudo derivar: "+e.message);}
+}
+$("calcDeriv").addEventListener("click",computeDerivative);
+$("resetDeriv").addEventListener("click",()=>{
+  $("derivExpr").value="x^3-3*x^2+2";
+  $("derivPoint").value=2;
+  $("derivH").value=4;
+  $("derivResult").textContent="—";
+  $("derivAtPoint").textContent="f′(x₀) = —";
+  drawEmpty("derivPlot","Configura una función y calcula su derivada");
+  drawEmpty("surfacePlot","La vista 3D aparecerá al derivar");
+  if(typeof gestureState!=="undefined"){
+    gestureState.ranges.derivPlot=null;
+    gestureState.cameraEye={...gestureState.defaultEye};
+  }
+});
+
+function median(a){const n=a.length,m=Math.floor(n/2);return n%2?a[m]:(a[m-1]+a[m])/2;}
+
+/** Layout base para escenas 3D de estadística */
+function stats3dLayout(title){
+  const eye = (typeof gestureState!=="undefined" && gestureState.dataEye)
+    ? {...gestureState.dataEye}
+    : {x:1.55, y:1.55, z:1.2};
+  return {
+    title:{text:title, font:{color:"#eaf5fc", size:15}},
+    paper_bgcolor:"#071a2a",
+    font:{color:"#b8cbd9"},
+    margin:{l:0, r:0, t:48, b:0},
+    scene:{
+      xaxis:{title:"", gridcolor:"#36536b", backgroundcolor:"#071a2a"},
+      yaxis:{title:"", gridcolor:"#36536b", backgroundcolor:"#071a2a"},
+      zaxis:{title:"", gridcolor:"#36536b", backgroundcolor:"#071a2a"},
+      bgcolor:"#071a2a",
+      camera:{eye, center:{x:0,y:0,z:0}, up:{x:0,y:0,z:1}}
+    },
+    showlegend:true,
+    legend:{orientation:"h", y:-0.12}
+  };
+}
+
+function analyzeData(){
+ try{
+  const raw=$("dataValues").value.trim();
+  const values=raw.split(/[,\s;]+/).filter(Boolean).map(Number);
+  if(!values.length||values.some(v=>!Number.isFinite(v)))
+    throw Error("Introduce únicamente números separados por coma o espacio.");
+  const a=[...values].sort((x,y)=>x-y), n=a.length;
+  const mean=a.reduce((s,v)=>s+v,0)/n, med=median(a);
+  const freq=new Map(); a.forEach(v=>freq.set(v,(freq.get(v)||0)+1));
+  const maxF=Math.max(...freq.values());
+  const modes=[...freq].filter(([,f])=>f===maxF).map(([v])=>v);
+  const range=a[n-1]-a[0];
+  const variance=a.reduce((s,v)=>s+(v-mean)**2,0)/n, sd=Math.sqrt(variance);
+  const rows=[
+    ["n",n],["Media",fmt(mean)],["Mediana",fmt(med)],
+    ["Moda",modes.length===n?"Sin moda":modes.map(fmt).join(", ")],
+    ["Rango",fmt(range)],["Desviación estándar poblacional",fmt(sd)]
+  ];
+  $("dataStats").innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("");
+
+  const type=$("chartType").value;
+  const entries=[...freq].sort((x,y)=>x[0]-y[0]);
+  const labels=entries.map(e=>String(e[0]));
+  const counts=entries.map(e=>e[1]);
+  let traces, layout;
+  // Marca si el gráfico actual de datos es 3D (para gestos)
+  if(typeof gestureState!=="undefined") gestureState.dataPlotIs3D = false;
+
+  if(type==="histogram3d"){
+    // Barras 3D por bins
+    const minV=a[0], maxV=a[n-1];
+    const binCount=Math.min(12, Math.max(5, Math.ceil(Math.sqrt(n))));
+    const binW=(maxV-minV)/binCount || 1;
+    const bins=Array.from({length:binCount},(_,i)=>({
+      x0: minV+i*binW, x1: minV+(i+1)*binW, c:0
+    }));
+    values.forEach(v=>{
+      let idx=Math.min(binCount-1, Math.floor((v-minV)/binW));
+      if(idx<0) idx=0;
+      bins[idx].c++;
+    });
+    traces=bins.map((b,i)=>({
+      type:"mesh3d",
+      name: i===0 ? "Frecuencia" : undefined,
+      showlegend: i===0,
+      x:[b.x0,b.x1,b.x1,b.x0, b.x0,b.x1,b.x1,b.x0],
+      y:[0,0,0.6,0.6, 0,0,0.6,0.6],
+      z:[0,0,0,0, b.c,b.c,b.c,b.c],
+      i:[0,0,0,1, 4,4,4,5, 0,1,2, 0,3,2],
+      j:[1,2,3,2, 5,6,7,6, 4,5,6, 4,7,6],
+      k:[2,3,0,3, 6,7,4,7, 5,6,1, 7,6,3],
+      color: `hsl(${190+i*8}, 85%, ${45+i*2}%)`,
+      opacity:0.92, flatshading:true, hoverinfo:"text",
+      text:`[${fmt(b.x0)}, ${fmt(b.x1)}] → ${b.c}`
+    }));
+    layout=stats3dLayout("Histograma 3D");
+    layout.scene.xaxis.title="Valor";
+    layout.scene.yaxis.title="";
+    layout.scene.zaxis.title="Frecuencia";
+    if(typeof gestureState!=="undefined") gestureState.dataPlotIs3D=true;
+  }
+  else if(type==="bar3d"){
+    traces=entries.map((e,i)=>{
+      const xv=e[0], h=e[1], w=0.35;
+      return {
+        type:"mesh3d",
+        name:i===0?"Frecuencia":undefined, showlegend:i===0,
+        x:[xv-w,xv+w,xv+w,xv-w, xv-w,xv+w,xv+w,xv-w],
+        y:[0,0,0.55,0.55, 0,0,0.55,0.55],
+        z:[0,0,0,0, h,h,h,h],
+        i:[0,0,0,1, 4,4,4,5, 0,1,2, 0,3,2],
+        j:[1,2,3,2, 5,6,7,6, 4,5,6, 4,7,6],
+        k:[2,3,0,3, 6,7,4,7, 5,6,1, 7,6,3],
+        color:`hsl(${175+i*12}, 80%, 50%)`,
+        opacity:0.9, flatshading:true,
+        text:`Valor ${fmt(xv)} → ${h}`, hoverinfo:"text"
+      };
+    });
+    layout=stats3dLayout("Barras 3D · frecuencia por valor");
+    layout.scene.xaxis.title="Valor";
+    layout.scene.zaxis.title="Frecuencia";
+    if(typeof gestureState!=="undefined") gestureState.dataPlotIs3D=true;
+  }
+  else if(type==="pie3d" || type==="pie"){
+    // Diagrama circular 3D: sectores tipo donut extruidos (altura ∝ frecuencia)
+    const total = counts.reduce((s,c)=>s+c, 0) || 1;
+    const R = 1, r = 0.4, segs = 20;
+    traces = [];
+    let a0 = -Math.PI / 2;
+    entries.forEach((e, idx) => {
+      const frac = e[1] / total;
+      const a1 = a0 + frac * 2 * Math.PI;
+      const h = 0.2 + frac * 1.5;
+      const color = `hsl(${175 + idx * 30}, 80%, 52%)`;
+      const X=[], Y=[], Z=[], I=[], J=[], K=[];
+      // Vértices: para cada ángulo, 4 puntos (out-top, in-top, out-bot, in-bot)
+      const nAng = segs + 1;
+      for (let s = 0; s < nAng; s++) {
+        const t = a0 + (a1 - a0) * (s / segs);
+        const c = Math.cos(t), si = Math.sin(t);
+        X.push(R*c, r*c, R*c, r*c);
+        Y.push(R*si, r*si, R*si, r*si);
+        Z.push(h, h, 0, 0);
+      }
+      for (let s = 0; s < segs; s++) {
+        const o = s * 4;
+        // tapa (out-top, in-top del anillo)
+        I.push(o, o); J.push(o+1, o+4); K.push(o+4, o+5);
+        // base
+        I.push(o+2, o+2); J.push(o+6, o+3); K.push(o+3, o+7);
+        // exterior
+        I.push(o, o); J.push(o+4, o+2); K.push(o+2, o+6);
+        // interior
+        I.push(o+1, o+1); J.push(o+3, o+5); K.push(o+5, o+7);
+      }
+      // caras de cierre del sector
+      const last = segs * 4;
+      I.push(0, 0, last, last);
+      J.push(1, 2, last+1, last+2);
+      K.push(2, 3, last+2, last+3);
+
+      const pct = ((e[1]/total)*100).toFixed(1);
+      traces.push({
+        type:"mesh3d", x:X, y:Y, z:Z, i:I, j:J, k:K,
+        color, opacity:0.93, flatshading:true,
+        name:`${fmt(e[0])} (${pct}%)`,
+        text:`Valor ${fmt(e[0])}: ${e[1]} obs. (${pct}%)`,
+        hoverinfo:"text", showlegend:true
+      });
+      a0 = a1;
+    });
+    layout = stats3dLayout("Diagrama circular 3D · proporción por valor");
+    layout.scene.xaxis.title = "";
+    layout.scene.yaxis.title = "";
+    layout.scene.zaxis.title = "Peso relativo";
+    layout.scene.aspectmode = "data";
+    if (typeof gestureState !== "undefined") gestureState.dataPlotIs3D = true;
+  }
+  else if(type==="box"){
+    traces=[{
+      y:values, type:"box", name:"Conjunto",
+      boxpoints:"all", jitter:0.35, pointpos:0,
+      marker:{color:"#b8ef2b"}, line:{color:"#00c2ff"}
+    }];
+    layout=plotLayout("Diagrama de caja","Conjunto","Valor");
+  }
+  else if(type==="line3d"){
+    // Secuencia temporal/orden: índice → valor en 3D
+    const idx=values.map((_,i)=>i+1);
+    const z0=values.map(()=>0);
+    traces=[
+      {
+        type:"scatter3d", mode:"lines+markers", name:"Secuencia",
+        x:idx, y:z0, z:values,
+        line:{color:"#00c2ff", width:5},
+        marker:{size:4, color:values, colorscale:[[0,"#00c2ff"],[1,"#b8ef2b"]]}
+      },
+      {
+        type:"scatter3d", mode:"markers", name:"Media",
+        x:[ (n+1)/2 ], y:[0], z:[mean],
+        marker:{size:7, color:"#ff7a1a", symbol:"diamond"}
+      }
+    ];
+    layout=stats3dLayout("Secuencia de datos en 3D");
+    layout.scene.xaxis.title="Orden";
+    layout.scene.zaxis.title="Valor";
+    if(typeof gestureState!=="undefined") gestureState.dataPlotIs3D=true;
+  }
+  else {
+    // fallback barras 2D
+    traces=[{x:labels, y:counts, type:"bar", marker:{color:"#00c2ff"}}];
+    layout=plotLayout("Frecuencia por valor","Valor","Frecuencia");
+  }
+
+  Plotly.react("dataPlot", traces, layout, plotConfig);
+  if(typeof gestureState!=="undefined"){
+    gestureState.ranges.dataPlot=null;
+    if(gestureState.dataPlotIs3D && layout.scene && layout.scene.camera)
+      gestureState.dataEye = {...layout.scene.camera.eye};
+  }
+  $("dataInterpretation").textContent=
+    `Se analizaron ${n} observaciones. Media = ${fmt(mean)}, mediana = ${fmt(med)}, rango = ${fmt(range)}, desviación estándar poblacional = ${fmt(sd)}. `+
+    (modes.length===n
+      ? "Todos los valores aparecen una sola vez; no hay moda. "
+      : `Moda(s): ${modes.map(fmt).join(", ")}. `)+
+    "Interpreta estas medidas junto con la forma de la distribución y el contexto de los datos. "+
+    (type.includes("3d") || type==="line3d"
+      ? "Puedes rotar y hacer zoom en la gráfica 3D con gestos (✋ Gestos) o con el ratón."
+      : "");
+ }catch(e){showToast(e.message);}
+}
+$("analyzeData").addEventListener("click",analyzeData);
+$("chartType").addEventListener("change",()=>{if($("dataStats").textContent!=="—")analyzeData();});
+$("sampleData").addEventListener("click",()=>{$("dataValues").value="10, 10, 10, 60, 60, 60";analyzeData();});
+function getLesson(){return {title:$("lessonTitle").value.trim(),level:$("lessonLevel").value,duration:$("lessonDuration").value.trim(),objective:$("lessonObjective").value.trim(),question:$("lessonQuestion").value.trim(),evidence:$("lessonEvidence").value.trim(),updatedAt:new Date().toISOString()};}
+function generateLesson(){
+ const d=getLesson();if(!d.title||!d.duration||!d.objective||!d.question||!d.evidence)throw Error("Completa todos los campos de la secuencia.");
+ const sections=[
+ ["1. OBSERVAR","Explora la situación y describe lo que ves. Identifica variables, patrones, regularidades y preguntas. Representa tus primeras conjeturas mediante una tabla, un dibujo o una gráfica."],
+ ["2. CALCULAR","Selecciona procedimientos y herramientas para poner a prueba tus conjeturas. Registra los cálculos, las aproximaciones y las decisiones tomadas. Compara distintos procedimientos."],
+ ["3. EXPLICAR","Comunica una conclusión con lenguaje matemático. Justifica por qué tus resultados responden a la pregunta y señala las limitaciones de tu procedimiento. Puedes entregar una explicación escrita u oral."],
+ ["4. TRANSFERIR","Aplica la idea matemática a una situación diferente. Construye un ejemplo propio, modifica las condiciones iniciales y explica qué cambia y qué permanece."]
+ ];
+ lastScript=`MATHEMA · GUION PARA ESTUDIANTES\n${d.title}\nNivel: ${d.level} | Duración: ${d.duration}\n\nOBJETIVO\n${d.objective}\n\nPREGUNTA RETADORA\n${d.question}\n\n${sections.map(s=>s[0]+"\n"+s[1]).join("\n\n")}\n\nEVIDENCIA DE APRENDIZAJE\n${d.evidence}\n\nCRITERIOS DE EVALUACIÓN (100 PUNTOS)\nExactitud matemática: 35 puntos. Argumentación: 30 puntos. Diseño XR: 20 puntos. Inclusión: 15 puntos.\n\nPuedes realizar las representaciones en 2D si no dispones de cámara o visor.`;
+ $("studentScript").textContent=lastScript;$("saveStatus").textContent="Secuencia generada. Puedes guardarla en este navegador o exportarla.";return d;
+}
+$("lessonForm").addEventListener("submit",e=>{e.preventDefault();try{generateLesson();showToast("Guion y rúbrica generados.");}catch(err){showToast(err.message);}});
+$("saveLesson").addEventListener("click",()=>{try{const d=generateLesson();localStorage.setItem("mathema.lesson.v1",JSON.stringify(d));$("saveStatus").textContent="Proyecto guardado en este navegador.";showToast("Proyecto guardado.");}catch(e){showToast(e.message);}});
+function downloadJSON(obj,name){const blob=new Blob([JSON.stringify(obj,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);}
+$("exportLesson").addEventListener("click",()=>{try{const d=generateLesson();downloadJSON({app:"Mathema",version:1,lesson:d},"mathema-secuencia.json");showToast("Proyecto exportado.");}catch(e){showToast(e.message);}});
+$("importLesson").addEventListener("click",()=>$("importFile").click());
+$("importFile").addEventListener("change",async e=>{const file=e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text()),d=data.lesson||data;if(!d||typeof d!=="object")throw Error("Estructura JSON no válida.");$("lessonTitle").value=d.title||"";$("lessonLevel").value=d.level||"Educación media";$("lessonDuration").value=d.duration||"";$("lessonObjective").value=d.objective||"";$("lessonQuestion").value=d.question||"";$("lessonEvidence").value=d.evidence||"";generateLesson();showToast("Proyecto importado correctamente.");}catch(err){showToast("No se pudo importar: "+err.message);}finally{e.target.value="";}});
+$("copyScript").addEventListener("click",async()=>{if(!lastScript){try{generateLesson();}catch(e){showToast(e.message);return;}}try{await navigator.clipboard.writeText(lastScript);showToast("Guion copiado al portapapeles.");}catch{showToast("No se pudo copiar automáticamente. Selecciona el texto del guion.");}});
+$("readScript").addEventListener("click",()=>{if(!lastScript){try{generateLesson();}catch(e){showToast(e.message);return;}}speak(lastScript);});
+function loadSaved(){try{const d=JSON.parse(localStorage.getItem("mathema.lesson.v1")||"null");if(d){$("lessonTitle").value=d.title||$("lessonTitle").value;$("lessonLevel").value=d.level||$("lessonLevel").value;$("lessonDuration").value=d.duration||$("lessonDuration").value;$("lessonObjective").value=d.objective||$("lessonObjective").value;$("lessonQuestion").value=d.question||$("lessonQuestion").value;$("lessonEvidence").value=d.evidence||$("lessonEvidence").value;generateLesson();$("saveStatus").textContent="Se recuperó el último proyecto guardado.";}}catch{}}
+
+/* ========== CONTROL GESTUAL CON MEDIAPIPE HANDS ========== */
+/* Palma abierta + movimiento → pan (2D) / rotar (3D)
+   Dos manos → zoom
+   Puño → restablecer vista
+   Aplica a: derivPlot, limitPlot, dataPlot (2D) y surfacePlot (3D) */
+const gestureState = {
+  active: false,
+  camera: null,
+  hands: null,
+  lastPalm: null,
+  lastTwoHandDist: null,
+  cameraEye: { x: 1.25, y: 1.25, z: 1.25 },
+  defaultEye: { x: 1.25, y: 1.25, z: 1.25 },
+  lastResetTime: 0,
+  // Rangos 2D por gráfica (se inicializan al primer gesto o al calcular)
+  ranges: {
+    limitPlot: null,
+    derivPlot: null,
+    dataPlot: null
+  },
+  dataPlotIs3D: false,
+  dataEye: { x: 1.55, y: 1.55, z: 1.2 }
+};
+
+function isFingerExtended(landmarks, tipIdx, pipIdx) {
+  return landmarks[tipIdx].y < landmarks[pipIdx].y - 0.02;
+}
+function isThumbExtended(landmarks) {
+  const tip = landmarks[4], mcp = landmarks[2], wrist = landmarks[0];
+  const tipDist = Math.hypot(tip.x - wrist.x, tip.y - wrist.y);
+  const mcpDist = Math.hypot(mcp.x - wrist.x, mcp.y - wrist.y);
+  return tipDist > mcpDist * 1.15;
+}
+function detectHandGesture(landmarks) {
+  const index = isFingerExtended(landmarks, 8, 6);
+  const middle = isFingerExtended(landmarks, 12, 10);
+  const ring = isFingerExtended(landmarks, 16, 14);
+  const pinky = isFingerExtended(landmarks, 20, 18);
+  const thumb = isThumbExtended(landmarks);
+  const extendedCount = [thumb, index, middle, ring, pinky].filter(Boolean).length;
+  if (extendedCount >= 4) return "OPEN_PALM";
+  if (extendedCount <= 1) return "FIST";
+  return "OTHER";
+}
+function palmCenter(landmarks) {
+  const idxs = [0, 5, 9, 13, 17];
+  let x = 0, y = 0;
+  idxs.forEach(i => { x += landmarks[i].x; y += landmarks[i].y; });
+  return { x: x / idxs.length, y: y / idxs.length };
+}
+
+/** Gráficas prioritarias según la página actual */
+function getActivePlotIds() {
+  if (currentPage === "derivatives") return ["derivPlot", "surfacePlot"];
+  if (currentPage === "limits") return ["limitPlot"];
+  if (currentPage === "data") return ["dataPlot"];
+  return ["derivPlot", "surfacePlot", "limitPlot"];
+}
+
+function is3DPlot(id) {
+  if (id === "surfacePlot") return true;
+  if (id === "dataPlot" && gestureState.dataPlotIs3D) return true;
+  return false;
+}
+
+/** Lee los rangos actuales de un plot 2D (o calcula desde los datos) */
+function ensure2DRange(id) {
+  if (gestureState.ranges[id]) return gestureState.ranges[id];
+  const el = $(id);
+  if (!el || !plotReady()) return null;
+  let x0, x1, y0, y1;
+  try {
+    const full = el._fullLayout;
+    if (full && full.xaxis && full.xaxis.range) {
+      x0 = full.xaxis.range[0]; x1 = full.xaxis.range[1];
+      y0 = full.yaxis.range[0]; y1 = full.yaxis.range[1];
+    }
+  } catch (e) {}
+  if (!Number.isFinite(x0) || !Number.isFinite(x1)) {
+    // Fallback: estimar desde los datos de la traza
+    const data = el.data || [];
+    let xs = [], ys = [];
+    data.forEach(t => {
+      if (t.x) xs = xs.concat(t.x.filter(Number.isFinite));
+      if (t.y) ys = ys.concat(t.y.filter(Number.isFinite));
+    });
+    if (!xs.length) return null;
+    x0 = Math.min(...xs); x1 = Math.max(...xs);
+    y0 = ys.length ? Math.min(...ys) : -1;
+    y1 = ys.length ? Math.max(...ys) : 1;
+    const px = (x1 - x0) * 0.08 || 1;
+    const py = (y1 - y0) * 0.08 || 1;
+    x0 -= px; x1 += px; y0 -= py; y1 += py;
+  }
+  gestureState.ranges[id] = { x0, x1, y0, y1 };
+  return gestureState.ranges[id];
+}
+
+/** Aplica pan (desplazamiento) a una gráfica 2D */
+function pan2D(id, dxNorm, dyNorm) {
+  const r = ensure2DRange(id);
+  if (!r) return;
+  const xSpan = r.x1 - r.x0;
+  const ySpan = r.y1 - r.y0;
+  // dxNorm positivo = mano a la derecha → desplazar vista a la izquierda (como arrastrar)
+  const shiftX = -dxNorm * xSpan * 1.8;
+  const shiftY = dyNorm * ySpan * 1.8; // y de cámara invertida respecto a pantalla
+  r.x0 += shiftX; r.x1 += shiftX;
+  r.y0 += shiftY; r.y1 += shiftY;
+  Plotly.relayout(id, {
+    "xaxis.range": [r.x0, r.x1],
+    "yaxis.range": [r.y0, r.y1],
+    "xaxis.autorange": false,
+    "yaxis.autorange": false
+  });
+}
+
+/** Aplica zoom a una gráfica 2D (factor < 1 acerca, > 1 aleja) */
+function zoom2D(id, factor) {
+  const r = ensure2DRange(id);
+  if (!r) return;
+  const cx = (r.x0 + r.x1) / 2;
+  const cy = (r.y0 + r.y1) / 2;
+  let halfX = (r.x1 - r.x0) / 2 * factor;
+  let halfY = (r.y1 - r.y0) / 2 * factor;
+  // Límites de zoom razonables
+  halfX = Math.max(1e-6, Math.min(1e6, halfX));
+  halfY = Math.max(1e-6, Math.min(1e6, halfY));
+  r.x0 = cx - halfX; r.x1 = cx + halfX;
+  r.y0 = cy - halfY; r.y1 = cy + halfY;
+  Plotly.relayout(id, {
+    "xaxis.range": [r.x0, r.x1],
+    "yaxis.range": [r.y0, r.y1],
+    "xaxis.autorange": false,
+    "yaxis.autorange": false
+  });
+}
+
+function apply3DCamera(plotId) {
+  const ids = plotId ? [plotId] : getActivePlotIds().filter(is3DPlot);
+  ids.forEach(id => {
+    const el = $(id);
+    if (!el || !plotReady() || !el.data || !el.data.length) return;
+    const eye = (id === "dataPlot") ? gestureState.dataEye : gestureState.cameraEye;
+    Plotly.relayout(id, {
+      "scene.camera.eye": { ...eye },
+      "scene.camera.center": { x: 0, y: 0, z: 0 },
+      "scene.camera.up": { x: 0, y: 0, z: 1 }
+    });
+  });
+}
+
+function rotate3DFor(id, dxNorm, dyNorm) {
+  const isData = id === "dataPlot";
+  const eye = isData ? gestureState.dataEye : gestureState.cameraEye;
+  let r = Math.hypot(eye.x, eye.y, eye.z) || 1.25;
+  let theta = Math.atan2(eye.y, eye.x);
+  let phi = Math.acos(Math.max(-1, Math.min(1, eye.z / r)));
+  theta -= dxNorm * 4.5;
+  phi = Math.max(0.12, Math.min(Math.PI - 0.12, phi + dyNorm * 3.2));
+  const next = {
+    x: r * Math.sin(phi) * Math.cos(theta),
+    y: r * Math.sin(phi) * Math.sin(theta),
+    z: r * Math.cos(phi)
+  };
+  if (isData) gestureState.dataEye = next;
+  else gestureState.cameraEye = next;
+  apply3DCamera(id);
+}
+
+function zoom3DFor(id, factor) {
+  const isData = id === "dataPlot";
+  const eye = isData ? gestureState.dataEye : gestureState.cameraEye;
+  const r = Math.hypot(eye.x, eye.y, eye.z) || 1.25;
+  const newR = Math.max(0.35, Math.min(5, r * factor));
+  const s = newR / r;
+  const next = { x: eye.x * s, y: eye.y * s, z: eye.z * s };
+  if (isData) gestureState.dataEye = next;
+  else gestureState.cameraEye = next;
+  apply3DCamera(id);
+}
+
+// Compatibilidad con llamadas anteriores
+function rotate3D(dxNorm, dyNorm) {
+  getActivePlotIds().filter(is3DPlot).forEach(id => rotate3DFor(id, dxNorm, dyNorm));
+}
+function zoom3D(factor) {
+  getActivePlotIds().filter(is3DPlot).forEach(id => zoom3DFor(id, factor));
+}
+
+function resetView() {
+  gestureState.cameraEye = { ...gestureState.defaultEye };
+  gestureState.dataEye = { x: 1.55, y: 1.55, z: 1.2 };
+  gestureState.lastPalm = null;
+  gestureState.lastTwoHandDist = null;
+  gestureState.ranges = { limitPlot: null, derivPlot: null, dataPlot: null };
+
+  // 3D (surface + data 3D)
+  apply3DCamera();
+
+  // 2D: autorange
+  ["limitPlot", "derivPlot", "dataPlot"].forEach(id => {
+    if (is3DPlot(id)) return;
+    const el = $(id);
+    if (el && el.layout) {
+      Plotly.relayout(id, {
+        "xaxis.autorange": true,
+        "yaxis.autorange": true
+      }).catch(() => {});
+    }
+  });
+  $("gestureLabel").textContent = "Vista restablecida";
+}
+
+function onHandsResults(results) {
+  const canvas = $("gestureCanvas");
+  const video = $("gestureVideo");
+  if (!canvas || !video) return;
+  const ctx = canvas.getContext("2d");
+  canvas.width = video.videoWidth || 320;
+  canvas.height = video.videoHeight || 240;
+  ctx.save();
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
+
+  const hands = results.multiHandLandmarks || [];
+  let label = "Sin manos";
+  const plotIds = getActivePlotIds();
+
+  if (hands.length === 0) {
+    gestureState.lastPalm = null;
+    gestureState.lastTwoHandDist = null;
+  } else if (hands.length >= 2) {
+    // ——— ZOOM con dos manos ———
+    const c1 = palmCenter(hands[0]);
+    const c2 = palmCenter(hands[1]);
+    const dist = Math.hypot(c1.x - c2.x, c1.y - c2.y);
+    label = "Zoom (2 manos)";
+    if (gestureState.lastTwoHandDist !== null) {
+      const delta = dist - gestureState.lastTwoHandDist;
+      // Separar manos → alejar (factor > 1); juntar → acercar (factor < 1)
+      const factor = 1 - delta * 2.8;
+      const clamped = Math.max(0.85, Math.min(1.18, factor));
+      plotIds.forEach(id => {
+        if (is3DPlot(id)) zoom3D(clamped);
+        else zoom2D(id, clamped);
+      });
+    }
+    gestureState.lastTwoHandDist = dist;
+    gestureState.lastPalm = null;
+    hands.forEach(lm => {
+      if (typeof drawConnectors === "function") {
+        drawConnectors(ctx, lm, HAND_CONNECTIONS, { color: "#00c2ff", lineWidth: 2 });
+        drawLandmarks(ctx, lm, { color: "#b8ef2b", lineWidth: 1, radius: 3 });
+      }
+    });
+  } else {
+    // ——— Una mano ———
+    const lm = hands[0];
+    const gesture = detectHandGesture(lm);
+    const center = palmCenter(lm);
+
+    if (typeof drawConnectors === "function") {
+      drawConnectors(ctx, lm, HAND_CONNECTIONS, { color: "#00c2ff", lineWidth: 2 });
+      drawLandmarks(ctx, lm, { color: "#b8ef2b", lineWidth: 1, radius: 3 });
+    }
+
+    if (gesture === "FIST") {
+      label = "Puño → Restablecer";
+      const now = Date.now();
+      if (now - gestureState.lastResetTime > 1100) {
+        resetView();
+        gestureState.lastResetTime = now;
+      }
+      gestureState.lastPalm = null;
+      gestureState.lastTwoHandDist = null;
+    } else if (gesture === "OPEN_PALM") {
+      label = currentPage === "derivatives" && plotIds.includes("surfacePlot")
+        ? "Palma → Mover / Rotar"
+        : "Palma abierta → Mover";
+      if (gestureState.lastPalm) {
+        const dx = center.x - gestureState.lastPalm.x;
+        const dy = center.y - gestureState.lastPalm.y;
+        plotIds.forEach(id => {
+          if (is3DPlot(id)) rotate3D(dx, dy);
+          else pan2D(id, dx, dy);
+        });
+      }
+      gestureState.lastPalm = center;
+      gestureState.lastTwoHandDist = null;
+    } else {
+      label = "Otro gesto";
+      gestureState.lastPalm = null;
+    }
+  }
+
+  $("gestureLabel").textContent = label;
+  ctx.restore();
+}
+
+async function startGestureControl() {
+  if (typeof Hands === "undefined" || typeof Camera === "undefined") {
+    showToast("MediaPipe no está disponible. Comprueba la conexión.");
+    return;
+  }
+  try {
+    const video = $("gestureVideo");
+    const hands = new Hands({
+      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+    });
+    hands.setOptions({
+      maxNumHands: 2,
+      modelComplexity: 1,
+      minDetectionConfidence: 0.6,
+      minTrackingConfidence: 0.5
+    });
+    hands.onResults(onHandsResults);
+    gestureState.hands = hands;
+
+    const camera = new Camera(video, {
+      onFrame: async () => {
+        if (gestureState.active && gestureState.hands) {
+          await gestureState.hands.send({ image: video });
+        }
+      },
+      width: 320,
+      height: 240
+    });
+    await camera.start();
+    gestureState.camera = camera;
+    gestureState.active = true;
+    $("gesturePanel").classList.add("active");
+    $("gestureBtn").classList.add("gesture-on");
+    $("gestureBtn").textContent = "✋ Gestos ON";
+    $("gestureLabel").textContent = "Buscando manos…";
+    showToast("Gestos activos: palma = mover, 2 manos = zoom, puño = restablecer.");
+  } catch (err) {
+    console.error(err);
+    showToast("No se pudo acceder a la cámara: " + (err.message || "permiso denegado"));
+    stopGestureControl();
+  }
+}
+
+function stopGestureControl() {
+  gestureState.active = false;
+  if (gestureState.camera) {
+    try { gestureState.camera.stop(); } catch (e) {}
+    gestureState.camera = null;
+  }
+  gestureState.hands = null;
+  gestureState.lastPalm = null;
+  gestureState.lastTwoHandDist = null;
+  $("gesturePanel").classList.remove("active");
+  $("gestureBtn").classList.remove("gesture-on");
+  $("gestureBtn").textContent = "✋ Gestos";
+  $("gestureLabel").textContent = "—";
+  const video = $("gestureVideo");
+  if (video && video.srcObject) {
+    video.srcObject.getTracks().forEach(t => t.stop());
+    video.srcObject = null;
+  }
+}
+
+$("gestureBtn").addEventListener("click", () => {
+  if (gestureState.active) stopGestureControl();
+  else startGestureControl();
+});
+
+function enterApp(){
+  $("cover").classList.add("hidden");
+  $("app").classList.add("visible");
+  // Redimensionar gráficas tras mostrar el layout
+  requestAnimationFrame(()=>{
+    if(plotReady())["limitPlot","derivPlot","surfacePlot","dataPlot"].forEach(id=>{
+      const el=$(id); if(el&&el.data) Plotly.Plots.resize(el);
+    });
+  });
+}
+$("enterApp").addEventListener("click", enterApp);
+
+function init(){
+ initCapabilities();
+ if(plotReady()){drawEmpty("limitPlot","Configura y calcula un límite");drawEmpty("derivPlot","Configura una función y calcula su derivada");drawEmpty("surfacePlot","La vista 3D de la función aparecerá al derivar");drawEmpty("dataPlot","Analiza un conjunto de datos");}
+ loadSaved();if(mathReady()){$("homeMath").textContent="Operativo";}else showToast("No se cargó math.js. Verifica la conexión a internet.");
+}
+window.addEventListener("resize",()=>{if(plotReady())["limitPlot","derivPlot","surfacePlot","dataPlot"].forEach(id=>{const el=$(id);if(el&&el.data)Plotly.Plots.resize(el);});});
+init();
+</script>
+</body>
+</html>
